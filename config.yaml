@@ -1,18 +1,18 @@
 input:
   train:
-    - [ "/your path/merge/bb/merge_bb_*.root" ]
-    - [ "/your path/merge/cc/merge_cc_*.root" ]
-    - [ "/your path/gg/merge_gg_*.root" ]
-    - [ "/your path/bbbar/merge_bbbar_*.root" ]
-    - [ "/your path/merge/ccbar/merge_ccbar_*.root" ]
-    - [ "/your path/merge/dd/merge_dd_*.root" ]
-    - [ "/your pathmerge/ddbar/merge_ddbar_*.root" ]
-    - [ "/your path/merge/uu/merge_uu_*.root" ]
-    - [ "/your path/merge/uubar/merge_uubar_*.root" ]
-    - [ "/your path/merge/ss/merge_ss_*.root" ]
-    - [ "/your path/merge/ssbar/merge_ssbar_*.root" ]
-  val: ["/your path/merge/val/*"]
-  test: ["/your path/merge/test/*"]
+    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/bb/merge_bb_*.root" ]
+    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/cc/merge_cc_*.root" ]
+    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/gg/merge_gg_*.root" ]
+    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/bbbar/merge_bbbar_*.root" ]
+    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/ccbar/merge_ccbar_*.root" ]
+    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/dd/merge_dd_*.root" ]
+    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/ddbar/merge_ddbar_*.root" ]
+    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/uu/merge_uu_*.root" ]
+    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/uubar/merge_uubar_*.root" ]
+    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/ss/merge_ss_*.root" ]
+    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/ssbar/merge_ssbar_*.root" ]
+  val: ["/cefs/higgs/zhuyifan/sample/training/input/input/merge/val/*"]
+  test: ["/cefs/higgs/zhuyifan/sample/training/input/input/merge/test/*"]
 
 #---root -> csv
 
@@ -30,6 +30,23 @@ features:
   - jet_pt
   - jet_phi
   - jet_nparticles
+  - btag
+  - ctag
+  - part_dphi_0
+  - part_dphi_1
+  - part_dphi_2
+  - part_dphi_3
+  - part_dphi_4
+  - part_deta_0
+  - part_deta_1
+  - part_deta_2
+  - part_deta_3
+  - part_deta_4
+  - part_pt_log_0
+  - part_pt_log_1
+  - part_pt_log_2
+  - part_pt_log_3
+  - part_pt_log_4
 
 observables:
   - jet_eta
@@ -49,6 +66,7 @@ labels:
   - label_sbar
   - label_g
 
+
 target: bdtlabel
 
 xgboost_params:
@@ -56,4 +74,4 @@ xgboost_params:
   num_class: 11
   max_depth: 6
   eta: 0.1
-  eval_metric: mlogloss
+#  eval_metric: mlogloss

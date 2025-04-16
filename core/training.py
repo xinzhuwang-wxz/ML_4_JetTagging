@@ -11,13 +11,35 @@ import uproot
 import uproot3
 import awkward as ak
 import argparse
-from sklearn.metrics import accuracy_score
-
+from sklearn.metrics import accuracy_score, log_loss, recall_score, roc_auc_score
+from sklearn.metrics import accuracy_score, log_loss, recall_score, roc_auc_score, roc_curve
 
 def load_config(config_path):
     with open(config_path, 'r') as f:
         return yaml.safe_load(f)
 
+
+def compute_metrics(y_true, y_pred_proba, y_pred_label, num_classes):
+    metrics = {}
+    metrics["accuracy"] = accuracy_score(y_true, y_pred_label)
+    metrics["loss"] = log_loss(y_true, y_pred_proba, labels=list(range(num_classes)))
+    metrics["recall"] = recall_score(y_true, y_pred_label, average="macro")
+    try:
+        metrics["auc"] = roc_auc_score(
+            y_true, y_pred_proba, multi_class="ovr", average="macro"
+        )
+    except ValueError:
+        metrics["auc"] = None  # Handle cases where AUC cannot be computed
+
+    # Compute TPR and FPR for each class
+    metrics["tpr"] = {}
+    metrics["fpr"] = {}
+    for i in range(num_classes):
+        fpr, tpr, _ = roc_curve((y_true == i).astype(int), y_pred_proba[:, i])
+        metrics["tpr"][f"class_{i}"] = tpr.tolist()
+        metrics["fpr"][f"class_{i}"] = fpr.tolist()
+
+    return metrics
 
 def save_model_and_metrics(model, metrics, output_dir):
     os.makedirs(output_dir, exist_ok=True)
@@ -66,6 +88,7 @@ def training_pipeline(config_path, train_csv, val_csv, test_csv, output_dir):
     labels = config["labels"]
     target_col = config["target"]
     xgb_params = config["xgboost_params"]
+    num_classes = xgb_params["num_class"]
 
     print("[INFO] Loaded config:", config)
 
@@ -97,18 +120,29 @@ def training_pipeline(config_path, train_csv, val_csv, test_csv, output_dir):
 
     print("[INFO] Training completed.")
 
-    # Predict
-    y_pred_proba = model.predict(dtest)
-    y_pred_label = np.argmax(y_pred_proba, axis=1)
-    acc = accuracy_score(y_test, y_pred_label)
-    print(f"[INFO] Test Accuracy: {acc:.4f}")
 
-    print("[INFO] Predictions completed.")
+    # Predict
+    y_train_pred_proba = model.predict(dtrain)
+    y_val_pred_proba = model.predict(dval)
+    y_test_pred_proba = model.predict(dtest)
+
+    y_train_pred_label = np.argmax(y_train_pred_proba, axis=1)
+    y_val_pred_label = np.argmax(y_val_pred_proba, axis=1)
+    y_test_pred_label = np.argmax(y_test_pred_proba, axis=1)
+
+    # Compute metrics
+    metrics = {
+        "train": compute_metrics(y_train, y_train_pred_proba, y_train_pred_label, num_classes),
+        "val": compute_metrics(y_val, y_val_pred_proba, y_val_pred_label, num_classes),
+        "test": compute_metrics(y_test, y_test_pred_proba, y_test_pred_label, num_classes),
+    }
+
+    print("[INFO] Metrics:", metrics)
 
     # Save
-    save_model_and_metrics(model, {"test_accuracy": acc}, output_dir)
+    save_model_and_metrics(model, metrics, output_dir)
     output_root_path = os.path.join(output_dir, "pred.root")
-    save_predictions_to_root(df_test.reset_index(drop=True), y_test.values, y_pred_proba, output_root_path, labels, observables)
+    save_predictions_to_root(df_test.reset_index(drop=True), y_test.values, y_test_pred_proba, output_root_path, labels, observables)
 
     print("[INFO] Predictions saved to ROOT file.")
 

@@ -46,6 +46,20 @@ class ReadRoot:
         choices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         df['bdtlabel'] = np.select(conditions, choices, default=-1)  # Default to -1 if no condition matches
 
+        # for object, we only keep the first 2, then delete the object column to save space
+        for col in df.columns:
+            if df[col].dtype == 'object':
+                df[col + '_0'] = df[col].apply(lambda x: x[0] if len(x) > 0 else 0)
+                df[col + '_1'] = df[col].apply(lambda x: x[1] if len(x) > 1 else 0)
+                df[col + '_2'] = df[col].apply(lambda x: x[2] if len(x) > 2 else 0)
+                df[col + '_3'] = df[col].apply(lambda x: x[3] if len(x) > 3 else 0)
+                df[col + '_4'] = df[col].apply(lambda x: x[4] if len(x) > 4 else 0)
+                del df[col]
+
+
+
+
+
         os.makedirs(os.path.dirname(self.output_path), exist_ok=True)
         df.to_csv(self.output_path, index=False)
 
