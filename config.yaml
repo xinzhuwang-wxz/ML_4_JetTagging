@@ -1,18 +1,18 @@
 input:
   train:
-    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/bb/merge_bb_*.root" ]
-    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/cc/merge_cc_*.root" ]
-    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/gg/merge_gg_*.root" ]
-    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/bbbar/merge_bbbar_*.root" ]
-    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/ccbar/merge_ccbar_*.root" ]
-    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/dd/merge_dd_*.root" ]
-    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/ddbar/merge_ddbar_*.root" ]
-    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/uu/merge_uu_*.root" ]
-    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/uubar/merge_uubar_*.root" ]
-    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/ss/merge_ss_*.root" ]
-    - [ "/cefs/higgs/zhuyifan/sample/training/input/input/merge/ssbar/merge_ssbar_*.root" ]
-  val: ["/cefs/higgs/zhuyifan/sample/training/input/input/merge/val/*"]
-  test: ["/cefs/higgs/zhuyifan/sample/training/input/input/merge/test/*"]
+    - [ "/your path3/merge/bb/merge_bb_*.root" ]
+    - [ "/your path3"/merge/cc/merge_cc_*.root" ]
+    - [ "/your path3"/merge/gg/merge_gg_*.root" ]
+    - [ "/your path3/merge/bbbar/merge_bbbar_*.root" ]
+    - [ "/your path3/merge/ccbar/merge_ccbar_*.root" ]
+    - [ "/your path3/merge/dd/merge_dd_*.root" ]
+    - [ "/your path3/merge/ddbar/merge_ddbar_*.root" ]
+    - [ "/your path3/merge/uu/merge_uu_*.root" ]
+    - [ "/your path3/merge/uubar/merge_uubar_*.root" ]
+    - [ "/your path3/merge/ss/merge_ss_*.root" ]
+    - [ "/your path3/merge/ssbar/merge_ssbar_*.root" ]
+  val: ["/your path3/merge/val/*"]
+  test: ["/your path3/merge/test/*"]
 
 #---root -> csv
 
