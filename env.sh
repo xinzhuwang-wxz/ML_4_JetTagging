@@ -5,6 +5,6 @@ source /cvmfs/sft.cern.ch/lcg/views/setupViews.sh LCG_100 x86_64-centos7-gcc8-op
 
 
 export DATA_DIR="/your path/merge"
-export PATH="/your path'/install/bin:$PATH"
+export PATH="/your path2/install/bin:$PATH"
 
 
